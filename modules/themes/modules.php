@@ -129,6 +129,7 @@ if (!hm_exists('hm_themes')) {
             'lumen' => 'Lumen',
             'lux' => 'Lux',
             'materia' => 'Materia',
+            'meridian' => 'Meridian',
             'minty' => 'Minty',
             'morph' => 'Morph',
             'pulse' => 'Pulse',

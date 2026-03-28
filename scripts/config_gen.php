@@ -526,13 +526,18 @@ function process_bootswatch_files() {
         if (($folder != '.' ) && ($folder != '..' )) {
             if (is_dir($src . '/' . $folder) && $folder != 'fonts') {
                 $target = $src . '/' . $folder . '/css/' . $folder . '.css';
+                $custom = file_get_contents($target);
                 if ($folder == 'default') {
                     $content = file_get_contents(VENDOR_PATH . 'twbs/bootstrap/dist/css/bootstrap.min.css');
                 } else {
-                    $content = file_get_contents(VENDOR_PATH . 'thomaspark/bootswatch/dist/' . $folder . '/bootstrap.min.css');
+                    // Detect Bootswatch theme from @import URL (supports custom folder names)
+                    $bootswatch_name = $folder;
+                    if (preg_match('/@import\s+url\([\'"]?.*bootswatch\/dist\/([^\/]+)\/bootstrap/i', $custom, $matches)) {
+                        $bootswatch_name = $matches[1];
+                    }
+                    $content = file_get_contents(VENDOR_PATH . 'thomaspark/bootswatch/dist/' . $bootswatch_name . '/bootstrap.min.css');
                 }
                 // Append customization done to the default theme
-                $custom = file_get_contents($target);
                 $custom = preg_replace('/^@import.+/m', '', $custom);
                 $custom = preg_replace('/^@charset.+/m', '', $custom);
                 $content .= "\n" . $custom;
